@@ -4,30 +4,59 @@ import axios from 'axios';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 
+
+
+const useAuthAPI = () => {
+  const resetPassword =  async (values) => {
+    const response = await axios.put('https://ecommerce.routemisr.com/api/v1/auth/resetPassword',values);
+    return response.data;
+  }
+
+  return {resetPassword};
+  
+}
+
+
+const validationSchema = Yup.object({
+  email: Yup.string().email().required('email is required'),
+  newPassword:Yup.string().matches(/^[A-Z][a-z0-9]{5,10}$/, 'invalid password password must start with capital letter and have 6-10 characters').required('password is required'),
+ 
+})
+
 export default function NewPassword() {
 
   let navigate = useNavigate();
   let [loading, setLoading] = useState(false);
   let [msg, setMsg] = useState('');
+  const { resetPassword} = useAuthAPI();
 
-  let validationSchema = Yup.object({
-    email: Yup.string().email().required('email is required'),
-    newPassword:Yup.string().matches(/^[A-Z][a-z0-9]{5,10}$/, 'invalid password password must start with capital letter and have 6-10 characters').required('password is required'),
-   
-  })
 
-  function handleNewPassword(values) {
-    setLoading(true);
-    axios.put('https://ecommerce.routemisr.com/api/v1/auth/resetPassword', values).then(({data})=> {
+  async function handleNewPassword(values) {
     
-    if(data.token) {
-      navigate('/login');
+    try {
+      
+      setLoading(true);
+      const data = await resetPassword(values);
+      if(data.token) {
+        navigate('/login')
+      }
+      
+    } catch (error) {
+      setMsg(error?.response?.data?.message || 'An error occurred');
+    } finally {
+      setLoading(false);
     }
 
-    }).catch((err) => {
-      setLoading(false);
-      setMsg( err?.response?.data?.message);
-    })
+    // axios.put('https://ecommerce.routemisr.com/api/v1/auth/resetPassword', values).then(({data})=> {
+    
+    // if(data.token) {
+    //   navigate('/login');
+    // }
+
+    // }).catch((err) => {
+    //   setLoading(false);
+    //   setMsg( err?.response?.data?.message);
+    // })
   }
 
 

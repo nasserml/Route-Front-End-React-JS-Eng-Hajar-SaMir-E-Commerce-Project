@@ -4,11 +4,25 @@ import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 
 
+
+
+//  Custome hook for API interaction
+const useAuthAPI = () => {
+  const verifyResetCode = async (values) => {
+    const response = await  axios.post('https://ecommerce.routemisr.com/api/v1/auth/verifyResetCode', values);
+    return response.data;
+  }
+
+  return {verifyResetCode};
+}
+
+
 export default function ResetCode() {
 
   let navigate = useNavigate();
   let [loading, setLoading] = useState(false);
   let [msg, setMsg] = useState('');
+  const {verifyResetCode}= useAuthAPI();
 
   
 
@@ -18,7 +32,10 @@ export default function ResetCode() {
         console.log(values)
         setLoading(true);
         setMsg('');
-        let{data}=await axios.post('https://ecommerce.routemisr.com/api/v1/auth/verifyResetCode', values);
+
+        const data = await verifyResetCode(values);
+
+        // let{data}=await axios.post('https://ecommerce.routemisr.com/api/v1/auth/verifyResetCode', values);
         setLoading(false);
         if(data.status ==='Success') {
             navigate('/newpassword')
@@ -26,7 +43,7 @@ export default function ResetCode() {
 
     } catch (err) {
 
-        setMsg(err?.response?.data?.message);
+        setMsg(err?.response?.data?.message || 'An error occurred');
         setLoading(false)
         
     }

@@ -16,16 +16,27 @@ const decodeToken = (token) => jwtDecode(token);
 
 const handleError = (error, setMsg, setLoading) => {
   setLoading(false);
-  setMsg(error?.response?.data?.message || 'Registration failed');
+  setMsg(error?.response?.data?.message  || 'Registration failed');
 }
 
 const validationSchema = Yup.object({
-  name: Yup.string().min(2, 'min length is 2 char').max(10, 'max length is 10 char').required('name is required'),
+  name: Yup.string().min(3, 'min length is 3 char').max(10, 'max length is 10 char').required('name is required'),
   email: Yup.string().email().required('email is required'),
   password:Yup.string().matches(/^[A-Z][a-z0-9]{5,10}$/,'invalid password password must start with capital letter and have 6-10 characters').required('password is required'),
   rePassword:Yup.string().oneOf([Yup.ref('password')], 'password does not match').required('rePassword is required'),
   phone: Yup.string().matches(/^01[0-25][0-9]{8}$/, 'invalid phone number phone must start with 01 and have 11 numbers').required('phone is required'),
 });
+
+const registerUser = async (values, onSuccess, onError) => {
+  try {
+    const { data } = await axios.post('https://ecommerce.routemisr.com/api/v1/auth/signup', values);
+    if (data.message === 'success') {
+      onSuccess(data.token);
+    }
+  } catch (error) {
+    onError(error);
+  }
+}
 
 
 export default function Register() {
@@ -35,57 +46,26 @@ export default function Register() {
   let [msg, setMsg] = useState('');
   let {setLogin} = useContext(auth)
 
-   
 
-  function handleRegister(values) {
-    setLoading(true);
-    axios.post('https://ecommerce.routemisr.com/api/v1/auth/signup', values).then(({data})=> {
-    console.log(data)
-    if(data.message === 'success') {
-      setMsg('');
-      setLoading(false);
-      localStorage.setItem('userToken', data.token);
-      setLogin(jwtDecode(data.token));
-      navigate('/')
-    }
-
-    }).catch((err) => {
-      setLoading(false);
-      setMsg( err?.response?.data?.message);
-    })
+  const onSuccess = (token) => {
+    setMsg('');
+    setLoading(false);
+    saveToken(token);
+    setLogin(decodeToken(token));
+    navigate('/')
   }
 
-  // function validation(values) {
-
-  //   let errors =  {}
-  //   if(!values.name) 
-  //     errors.name = 'name is required';
-  //   else if(!/^[A-Z][a-z]{3,5}$/.test(values.name))
-  //     errors.name = 'name must start with capital and have 3 to 5 characters';
-
-  //   if(!values.email) 
-  //     errors.email = 'email is required';
-  //   else if(!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email))
-  //     errors.email = 'invalid email address';
+  function handleRegister(values) {
 
 
-  //   if(!values.password)
-  //     errors.password = 'password is required';
-  //   else if(values.password.length < 8)
-  //     errors.password = 'password must be at least 8 characters';
 
-  //   if(!values.rePassword )
-  //     errors.rePassword = 'rePassword is required';
-  //   else if(values.rePassword !== values.password)
-  //     errors.rePassword = 'passwords do not match';
+    setLoading(true);
 
-  //   if(!values.phone)
-  //     errors.phone = 'phone is required';
-  //   else if(!/^[0-9]{10}$/.test(values.phone))
-  //     errors.phone = 'invalid phone number';
+    registerUser(values, onSuccess, (error) => handleError(error, setMsg,setLoading))
 
-  //     return errors;
-  // }
+  }
+
+ 
 
   let formik = useFormik({
     initialValues: {

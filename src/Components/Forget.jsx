@@ -6,13 +6,27 @@ import { Link, useNavigate } from 'react-router-dom';
 import { auth } from '../Context/AuthContext';
 import { jwtDecode } from 'jwt-decode';
 
+
+const useAuthAPI = () => {
+  const forgetPassword = async (values) => {
+    const response = await axios.post('https://ecommerce.routemisr.com/api/v1/auth/forgotPasswords', values);
+    return response.data;
+  };
+
+  return {forgetPassword}
+}
+
 export default function Forget() {
 
   let navigate = useNavigate();
   let [loading, setLoading] = useState(false);
   let [msg, setMsg] = useState('');
 
-  let validationSchema = Yup.object({
+  const {forgetPassword} = useAuthAPI();
+
+
+
+  const validationSchema = Yup.object({
     email: Yup.string().email().required('email is required'),
    
   })
@@ -22,7 +36,9 @@ export default function Forget() {
       try {
         setLoading(true);
         setMsg('');
-        let{data}=await axios.post('https://ecommerce.routemisr.com/api/v1/auth/forgotPasswords', values);
+
+        const data = await forgetPassword(values);
+
         setLoading(false);
 
         if(data.statusMsg==='success'){
@@ -30,7 +46,7 @@ export default function Forget() {
         }
     } catch (error) {
 
-        setMsg(err?.response?.data?.message);
+        setMsg(err?.response?.data?.message || 'An error occurred');
         setLoading(false)
         
     }

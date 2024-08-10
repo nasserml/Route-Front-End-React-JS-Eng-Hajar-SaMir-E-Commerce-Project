@@ -6,36 +6,83 @@ import { Link, useNavigate } from 'react-router-dom';
 import { auth } from '../Context/AuthContext';
 import { jwtDecode } from 'jwt-decode';
 
-export default function Login() {
 
-  let {setLogin} = useContext(auth);
-  let navigate = useNavigate();
-  let [loading, setLoading] = useState(false);
-  let [msg, setMsg] = useState('');
+const useAuthAPI = () => {
+  const loginUser = async (values) => {
+    const response = await axios.post('https://ecommerce.routemisr.com/api/v1/auth/signin',values);
+    return response.data;
+  }
 
-  let validationSchema = Yup.object({
-    email: Yup.string().email().required('email is required'),
-    password:Yup.string().matches(/^[A-Z][a-z0-9]{5,10}$/, 'invalid password password must start with capital letter and have 6-10 characters').required('password is required'),
-   
-  })
+  return {loginUser};
+}
 
-  function handleLogin(values) {
+
+const useLoginHandler =  () => {
+  const {setLogin} = useContext(auth);
+  const navigate = useNavigate();
+  const {loginUser} = useAuthAPI();
+
+  const handleLogin = async (values, setLoading, setMsg) => {
+   try {
+
     setLoading(true);
-    axios.post('https://ecommerce.routemisr.com/api/v1/auth/signin', values).then(({data})=> {
-    console.log(data)
+    const data = await loginUser(values);
     if(data.message === 'success') {
       setMsg('');
-      setLoading(false);
       localStorage.setItem('userToken', data.token);
-      setLogin(jwtDecode(data.token))
+      setLogin(jwtDecode(data.token));
       navigate('/')
     }
+    
+   } catch (error) {
 
-    }).catch((err) => {
+      setMsg(error?.response?.data?.message || 'An error occurred');
+    
+   } finally {
       setLoading(false);
-      setMsg( err?.response?.data?.message);
-    })
+   }
   }
+
+  return {handleLogin};
+};
+
+
+
+
+const validationSchema = Yup.object({
+  email: Yup.string().email().required('email is required'),
+  password:Yup.string().matches(/^[A-Z][a-z0-9]{5,10}$/, 'invalid password password must start with capital letter and have 6-10 characters').required('password is required'),
+ 
+})
+
+
+export default function Login() {
+
+  // let {setLogin} = useContext(auth);
+  // let navigate = useNavigate();
+  let [loading, setLoading] = useState(false);
+  let [msg, setMsg] = useState('');
+  const {handleLogin} = useLoginHandler();
+
+
+
+  // function handleLogin(values) {
+  //   setLoading(true);
+  //   axios.post('https://ecommerce.routemisr.com/api/v1/auth/signin', values).then(({data})=> {
+  //   console.log(data)
+  //   if(data.message === 'success') {
+  //     setMsg('');
+  //     setLoading(false);
+  //     localStorage.setItem('userToken', data.token);
+  //     setLogin(jwtDecode(data.token))
+  //     navigate('/')
+  //   }
+
+  //   }).catch((err) => {
+  //     setLoading(false);
+  //     setMsg( err?.response?.data?.message);
+  //   })
+  // }
 
 
   let formik = useFormik({
@@ -47,7 +94,7 @@ export default function Login() {
     },
     // validate:validation,
     validationSchema,
-    onSubmit: handleLogin
+    onSubmit: (values) => handleLogin(values, setLoading, setMsg),
 
   })
 
