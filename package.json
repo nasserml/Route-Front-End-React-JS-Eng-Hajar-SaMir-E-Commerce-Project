@@ -17,10 +17,13 @@
     "axios": "^1.7.3",
     "flowbite": "^2.4.1",
     "formik": "^2.4.6",
+    "framer-motion": "^11.3.24",
     "jwt-decode": "^4.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.0",
+    "react-slick": "^0.30.2",
+    "slick-carousel": "^1.8.1",
     "yup": "^1.4.0"
   },
   "devDependencies": {

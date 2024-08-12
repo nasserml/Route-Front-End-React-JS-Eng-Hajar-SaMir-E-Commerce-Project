@@ -29,7 +29,7 @@ export default function Navbar() {
         <div className='md:flex gap-2'>
           <img width={130} src={logo} alt="" />
 
-          {isLogin && <ul className={`md:flex gap-4 ${open ? 'block' : 'hidden'}`}>
+          {isLogin && <ul className={`  md:flex gap-4 ${open ? 'block' : 'hidden'}`}>
 
 
                           <li>
@@ -53,9 +53,6 @@ export default function Navbar() {
 
 
 
-                          <li>
-                            <NavLink to={'/categories'}>Categories</NavLink>
-                          </li>
 
 
 
@@ -72,8 +69,8 @@ export default function Navbar() {
 
             
 
-            {isLogin? 
-            <li onClick={logOut} className='cursor-pointer'>LogOut {isLogin? <b className='text-green-700'>Hi {isLogin.name}</b>: ''}</li>  : <>
+            {isLogin? <>
+            <li onClick={logOut} className='cursor-pointer px-3 py-2 bg-red-400 hover:bg-red-600 text-white transition-colors duration-200 max-md:w-fit max-md:my-3'>LogOut </li>{isLogin? <b className='text-green-700 ps-1 py-2'>Hi {isLogin.name}</b>: ''}</>  : <>
             <li>
               <NavLink to={'/login'}>Login</NavLink>
               
