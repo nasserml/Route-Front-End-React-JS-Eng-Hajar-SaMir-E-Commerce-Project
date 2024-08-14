@@ -1,8 +1,19 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Slider from "react-slick/lib/slider";
+import useMutationCart from "../../Hooks/useMutationCart";
+import { toast } from "react-toastify";
+import { addToCartApi } from "../../APIS/cartApi";
 
 export default function RelatedProducts({ products }) {
+
+    let {mutate:addMutate, status, data} = useMutationCart('addtocart',addToCartApi);
+
+  
+
+    if(status == 'success') toast.success(data?.data?.message);
+
+    if(status == 'error') console.log('error');
 
     var settings = {
         dots: false,
@@ -14,25 +25,25 @@ export default function RelatedProducts({ products }) {
     };
 
     return (
-        <div class="mt-16">
-            <h3 class="text-gray-600 text-2xl font-medium">More Products</h3>
+        <div className="mt-16">
+            <h3 className="text-gray-600 text-2xl font-medium">More Products</h3>
 
             <Slider {...settings}>
                 {products?.map((product,index) => {
                     return (
-                        <div key={index} class="w-full p-2 max-w-sm mx-auto  overflow-hidden">
-                            <div class=" shadow-md rounded-md ">
+                        <div key={index} className="w-full p-2 max-w-sm mx-auto  overflow-hidden">
+                            <div className=" shadow-md rounded-md ">
                             <div
-                                class="flex items-end justify-end h-56 w-full bg-cover bg-center"
-                                style={{ "background-image": `url(${product?.imageCover})` }}
+                                className="flex items-end justify-end h-56 w-full bg-cover bg-center"
+                                style={{ "backgroundImage": `url(${product?.imageCover})` }}
                             >
-                                <button class="p-2 rounded-full bg-blue-600 text-white mx-5 -mb-4 hover:bg-blue-500 focus:outline-none focus:bg-blue-500">
+                                <button onClick={() => addMutate(product?._id)} className="p-2 rounded-full bg-green-600 text-white mx-5 -mb-4 hover:bg-green-500 focus:outline-none">
                                     <svg
-                                        class="h-5 w-5"
+                                        className="h-5 w-5"
                                         fill="none"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
+                                        strokeLinecap="round"
+                                        strokeLineJoin="round"
+                                        strokeWidth="2"
                                         viewBox="0 0 24 24"
                                         stroke="currentColor"
                                     >
@@ -40,12 +51,12 @@ export default function RelatedProducts({ products }) {
                                     </svg>
                                 </button>
                             </div>
-                            <div class="px-5 py-3">
+                            <div className="px-5 py-3">
                                 <Link to={'/productdetails/'+product._id }>
-                                    <h3 class="text-gray-700 uppercase line-clamp-1">{product?.title}</h3>
+                                    <h3 className="text-gray-700 uppercase line-clamp-1">{product?.title}</h3>
 
                                 </Link>
-                                <span class="text-gray-500 mt-2">${product?.price}</span>
+                                <span className="text-gray-500 mt-2">${product?.price}</span>
                             </div>
 
                             </div>

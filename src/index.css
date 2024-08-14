@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
 :root{
     --light-color: #f0f3f2;
     --shadow: rgba(145,158,171,.2) 0px 2px 4px -1px,rgba(145,158,171,.14) 0px 4px 5px 0px,rgba(145,158,171,.12) 0px 1px 10px 0px;
@@ -30,11 +38,11 @@
 
 
 nav ul li a{
-    @apply px-2 py-1 transition-colors duration-500 inline-block
+    @apply px-2 py-1 transition-colors duration-500 inline-block hover:bg-green-100
 }
 
 nav ul li a.active {
-    @apply text-green-700 bg-green-100 rounded-md shadow
+    @apply text-blue-700 bg-green-200 rounded-md shadow
 }
 
 

@@ -4,7 +4,7 @@ export default function RatingStars({rating}) {
   return (
    
     <div className="flex items-center mt-2.5 mb-5 px-3">
-    {[1,2,3,4,5].map(rate=><svg
+    {[1,2,3,4,5].map((rate,index)=><svg key={index}
       className={rating >= rate ? "w-5 h-5 text-yellow-300":"w-5 h-5 text-gray-300"}
       fill="currentColor"
       viewBox="0 0 20 20"

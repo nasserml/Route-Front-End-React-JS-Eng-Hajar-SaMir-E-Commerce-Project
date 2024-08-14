@@ -12,9 +12,9 @@ export default function ProductImageSlider({images}) {
 
   return (
     <Slider {...settings}>
-      {images?.map((img) => (
-        <img
-          class=" w-[80%] mx-auto rounded-md object-contain"
+      {images?.map((img,index) => (
+        <img key={index}
+          className=" w-[80%] mx-auto rounded-md object-contain"
           src={img}
          
         />

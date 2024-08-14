@@ -14,6 +14,8 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.6.0",
+    "@tanstack/react-query": "^5.51.23",
+    "@tanstack/react-query-devtools": "^5.51.23",
     "axios": "^1.7.3",
     "flowbite": "^2.4.1",
     "formik": "^2.4.6",
@@ -23,6 +25,7 @@
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.0",
     "react-slick": "^0.30.2",
+    "react-toastify": "^10.0.5",
     "slick-carousel": "^1.8.1",
     "yup": "^1.4.0"
   },

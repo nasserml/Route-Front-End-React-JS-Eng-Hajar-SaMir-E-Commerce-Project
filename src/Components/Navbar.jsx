@@ -2,8 +2,13 @@ import React, { useContext, useState } from 'react'
 import logo from '../assets/finalProject assets/freshcart-logo.svg'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { auth } from '../Context/AuthContext'
+import { getCartApi } from '../APIS/cartApi';
+import useQueryCart from '../Hooks/useQueryCart';
 
 export default function Navbar() {
+
+  let {isError, error, data, isLoading, isFetching} = useQueryCart('getcart', getCartApi);
+
 
   let navigate = useNavigate();
 
@@ -42,15 +47,11 @@ export default function Navbar() {
                           </li>
 
 
-                          <li>
-                            <NavLink to={'/cart'}>Cart</NavLink>
-                          </li>
 
 
                           <li>
                             <NavLink to={'/brand'}>Brand</NavLink>
                           </li>
-
 
 
 
@@ -63,14 +64,21 @@ export default function Navbar() {
 
         <div>
 
-          <ul className={`md:flex gap-2 ${open ? 'block': 'hidden'}`}>
+          <ul className={`md:flex justify-center items-center gap-2 ${open ? 'block': 'hidden'}`}>
+
+
+            {isLogin&& <li className='relative mr-3'>
+                            <NavLink to={'/cart'}><i className="fa-solid fa-cart-shopping text-2xl"></i>
+                            <div className='absolute -top-2 -right-2 w-6 h-6 rounded-full bg-green-500 text-white text-xs flex justify-center items-center'>{data?.numOfCartItems||0}</div>
+                            </NavLink> 
+                          </li>}
 
             
 
             
 
             {isLogin? <>
-            <li onClick={logOut} className='cursor-pointer px-3 py-2 bg-red-400 hover:bg-red-600 text-white transition-colors duration-200 max-md:w-fit max-md:my-3'>LogOut </li>{isLogin? <b className='text-green-700 ps-1 py-2'>Hi {isLogin.name}</b>: ''}</>  : <>
+            <li onClick={logOut} className='cursor-pointer rounded-lg px-3 py-2 bg-red-400 hover:bg-red-600 text-white transition-colors duration-200 max-md:w-fit max-md:my-3'>LogOut </li>{isLogin&&<b className='text-green-700 ps-1 py-2'>Hi {isLogin.name}</b>} </>  : <>
             <li>
               <NavLink to={'/login'}>Login</NavLink>
               

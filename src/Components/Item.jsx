@@ -1,21 +1,39 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import RatingStars from "./RatingStars/RatingStars";
+import { useMutation } from "@tanstack/react-query";
+import { addToCartApi } from "../APIS/cartApi";
+import useMutationCart from "../Hooks/useMutationCart";
+import { toast } from "react-toastify";
 
 export default function Item({ ele }) {
+
+
+  let {mutate:addMutate, status, data} = useMutationCart('addtocart',addToCartApi);
+
+  
+
+  if(status == 'success') toast.success(data?.data?.message);
+
+  if(status == 'error') console.log('error');
+
+
+
+
+
   return (
     <div className="bg-white mx-auto shadow-md rounded-lg max-w-sm dark:bg-gray-800 dark:border-gray-700 duration-300 transition-all hover:bg-green-50  overflow-hidden hover:shadow-lg hover:scale-105">
-      <div class="">
+      <div className="">
         <Link to={`/productdetails/${ele?._id}`}>
-          <a href="#">
+          <div >
             <img
-              className="rounded-t-lg "
+              className="rounded-lg  "
               src={ele?.imageCover}
               alt="product image"
             />
-          </a>
+          </div>
           <div className="px-3 ">
-            <a href="#">
+            <div>
               <h3 className="text-gray-900 font-semibold text-xl tracking-tight line-clamp-1 dark:text-white">
                 {ele?.title}
               </h3>
@@ -24,7 +42,7 @@ export default function Item({ ele }) {
                 {ele?.category?.name}
               </p>
               <p className="line-clamp-2 my-2">{ele?.description}</p>
-            </a>
+            </div>
           </div>
         </Link>
 
@@ -35,7 +53,7 @@ export default function Item({ ele }) {
             ${ele?.price}
           </span>
           <button
-            
+            onClick={()=> addMutate(ele?._id)}
             className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
           >
             Add to cart
