@@ -6,6 +6,7 @@ import Loading from './Loading'
 import useMutationCart from '../Hooks/useMutationCart';
 import { toast } from 'react-toastify';
 import CartProduct from './CartProduct/CartProduct';
+import BasicModal from './BasicModal';
 
 export default function Cart() {
 
@@ -32,6 +33,7 @@ export default function Cart() {
 
 
     <div className=" pt-20">
+       
         <h1 className="mb-10 text-center text-2xl font-bold">Cart Items</h1>
         <div className="mx-auto max-w-5xl justify-center px-6 md:flex md:space-x-6 xl:px-0">
         <div className="rounded-lg md:w-2/3">
@@ -87,6 +89,10 @@ export default function Cart() {
     </div>
 
         <button onClick={()=> clearmuutate()} className='text-red-500 border-2 border-red-500 rounded-lg py-2 px-4 transition-colors duration-500 hover:bg-red-500 hover:text-white mx-auto mb-4 block'>Clear Cart</button>
+
+        <div className='flex justify-center items-center mt-5'>
+            <BasicModal cartId={data?.data?._id} />
+        </div>
 
     
 

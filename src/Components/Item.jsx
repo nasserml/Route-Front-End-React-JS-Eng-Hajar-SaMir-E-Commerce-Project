@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import RatingStars from "./RatingStars/RatingStars";
 import { useMutation } from "@tanstack/react-query";
@@ -7,6 +7,8 @@ import useMutationCart from "../Hooks/useMutationCart";
 import { toast } from "react-toastify";
 
 export default function Item({ ele }) {
+
+  let [flag, setFlag] = useState(false);
 
 
   let {mutate:addMutate, status, data} = useMutationCart('addtocart',addToCartApi);
@@ -24,6 +26,7 @@ export default function Item({ ele }) {
   return (
     <div className="bg-white mx-auto shadow-md rounded-lg max-w-sm dark:bg-gray-800 dark:border-gray-700 duration-300 transition-all hover:bg-green-50  overflow-hidden hover:shadow-lg hover:scale-105">
       <div className="">
+        
         <Link to={`/productdetails/${ele?._id}`}>
           <div >
             <img
@@ -47,6 +50,7 @@ export default function Item({ ele }) {
         </Link>
 
         <RatingStars rating={ele?.ratingsAverage}></RatingStars>
+        <i onClick={() => setFlag(!flag)} className={`text-green-700 fa-solid ${flag?'fa-heart text-red-500':'fa-heart-broken' }`}></i>
 
         <div className="flex items-center justify-between px-3 pb-3">
           <span className="text-3xl font-bold text-gray-900 dark:text-white">
