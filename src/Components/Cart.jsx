@@ -7,6 +7,7 @@ import useMutationCart from '../Hooks/useMutationCart';
 import { toast } from 'react-toastify';
 import CartProduct from './CartProduct/CartProduct';
 import BasicModal from './BasicModal';
+import { Link } from 'react-router-dom';
 
 export default function Cart() {
 
@@ -83,7 +84,7 @@ export default function Cart() {
                 <p className="text-sm text-gray-700">including VAT</p>
             </div>
             </div>
-            <button className="mt-6 w-full rounded-md bg-green-500 py-1.5 font-medium text-green-50 hover:bg-green-600">Check out</button>
+            <Link to={'/shippingaddress'}  className="mt-6 block text-center w-full rounded-md bg-green-500 py-1.5 font-medium text-green-50 hover:bg-green-600">Check out</Link>
         </div>
         </div>
     </div>

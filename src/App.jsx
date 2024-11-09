@@ -16,6 +16,7 @@ import ResetCode from './Components/ResetCode';
 import NewPassword from './Components/NewPassword';
 import ProductsDetails from './Components/ProductsDetails';
 import Orders from './Components/Orders';
+import ShippingAddress from './Components/ShippingAddress/ShippingAddress';
 
 export default function App() {
 
@@ -31,6 +32,7 @@ export default function App() {
       {path:'/reset', element:<ResetCode></ResetCode>},
       {path:'/login', element:<Login></Login>},
       {path:'/allorders', element:<Orders></Orders>},
+      {path:'/shippingaddress', element:<ShippingAddress></ShippingAddress>},
       {path:'/brand', element:<ProtectedRoutes><Brand></Brand></ProtectedRoutes>},
       {path:'*', element: <NotFound></NotFound>},
 

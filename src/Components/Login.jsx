@@ -99,7 +99,7 @@ export default function Login() {
   })
 
   return (
-    <div>
+    <div className='h-[65vh] pt-10'>
       <h2 className='my-3 text-2xl font-bold'>Login Now:</h2>
       
 
